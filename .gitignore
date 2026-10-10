@@ -30,3 +30,12 @@ Thumbs.db
 # Kotlin
 .kotlin/
 
+
+# 本地专用声明（不入库）
+app/src/main/res/values/local_only.xml
+
+
+# archify 中间产物
+docs/*.finalize*.json
+docs/*.browser-check.json
+

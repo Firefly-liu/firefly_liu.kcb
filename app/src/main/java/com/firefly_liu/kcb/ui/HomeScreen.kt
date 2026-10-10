@@ -682,22 +682,20 @@ private fun withSections(s: CourseSnapshot, newStart: Int?, totalSlots: Int): Co
     return s.copy(startSection = newStart, endSection = end)
 }
 
-/** 黑龙江工程学院课表样本（用于开发期验证渲染） */
+/** 开发期用的示例课表（虚构数据，仅用于验证渲染） */
 fun demoCourses(): List<Course> = listOf(
-    Course(id = 1, name = "工业机器人及应用", teacher = "钱书华", position = "综合1", campus = "东校区", day = 1, startSection = 1, endSection = 2, weeks = (1..8).toSet()),
-    Course(id = 2, name = "智能物流装备", teacher = "路丹丹", position = "综合3", campus = "东校区", day = 1, startSection = 3, endSection = 4, weeks = (1..16).toSet()),
-    Course(id = 3, name = "智能工厂规划与设计", teacher = "路丹丹", position = "K310", campus = "东校区", day = 1, startSection = 5, endSection = 6, weeks = (9..16).toSet()),
-    Course(id = 4, name = "工业机器人及应用", teacher = "钱书华", position = "K310", campus = "东校区", day = 1, startSection = 7, endSection = 8, weeks = (13..16).toSet()),
-    Course(id = 5, name = "智能制造质量控制", teacher = "张吉生", position = "南201", campus = "东校区", day = 1, startSection = 9, endSection = 10, weeks = (1..8).toSet()),
-    Course(id = 6, name = "智能工厂规划与设计", teacher = "路丹丹", position = "北101", campus = "东校区", day = 2, startSection = 5, endSection = 6, weeks = (1..8).toSet()),
-    Course(id = 7, name = "形势与政策", teacher = "于泳跃", position = "D308", campus = "西校区", day = 2, startSection = 5, endSection = 6, weeks = (9..12).toSet()),
-    Course(id = 8, name = "机械制造技术", teacher = "芦怀志", position = "综合1", campus = "东校区", day = 3, startSection = 1, endSection = 2, weeks = (1..16).toSet()),
-    Course(id = 9, name = "智能制造装备", teacher = "牛承全", position = "综合2", campus = "东校区", day = 3, startSection = 5, endSection = 6, weeks = (1..16).toSet()),
-    Course(id = 10, name = "智能制造质量控制", teacher = "张吉生", position = "南201", campus = "东校区", day = 3, startSection = 9, endSection = 10, weeks = (1..16).toSet()),
-    Course(id = 11, name = "工业机器人及应用", teacher = "钱书华", position = "综合1", campus = "东校区", day = 5, startSection = 1, endSection = 2, weeks = (1..12).toSet()),
-    Course(id = 12, name = "机械制造技术", teacher = "芦怀志", position = "综合1", campus = "东校区", day = 5, startSection = 3, endSection = 4, weeks = (1..16).toSet()),
-    Course(id = 13, name = "智能物流装备", teacher = "路丹丹", position = "K310", campus = "东校区", day = 5, startSection = 5, endSection = 6, weeks = (5..12).toSet()),
+    Course(id = 1, name = "高等数学", teacher = "李老师", position = "教学楼A101", day = 1, startSection = 1, endSection = 2, weeks = (1..16).toSet()),
+    Course(id = 2, name = "大学英语", teacher = "王老师", position = "教学楼B203", day = 1, startSection = 3, endSection = 4, weeks = (1..16).toSet()),
+    Course(id = 3, name = "线性代数", teacher = "张老师", position = "教学楼A102", day = 2, startSection = 5, endSection = 6, weeks = (1..8).toSet()),
+    Course(id = 4, name = "大学物理", teacher = "刘老师", position = "实验楼C301", day = 2, startSection = 5, endSection = 6, weeks = (9..16).toSet()),
+    Course(id = 5, name = "程序设计基础", teacher = "陈老师", position = "机房D401", day = 3, startSection = 1, endSection = 2, weeks = (1..16).toSet()),
+    Course(id = 6, name = "中国近现代史纲要", teacher = "赵老师", position = "教学楼A205", day = 3, startSection = 5, endSection = 6, weeks = (9..16).toSet()),
+    Course(id = 7, name = "体育", teacher = "孙老师", position = "体育馆", day = 4, startSection = 5, endSection = 6, weeks = (1..16).toSet()),
+    Course(id = 8, name = "数字电路", teacher = "周老师", position = "实验楼C202", day = 5, startSection = 1, endSection = 2, weeks = (1..16).toSet()),
+    Course(id = 9, name = "离散数学", teacher = "吴老师", position = "教学楼B105", day = 5, startSection = 3, endSection = 4, weeks = (1..8).toSet()),
+    Course(id = 10, name = "工程制图", teacher = "郑老师", position = "教学楼A110", day = 5, startSection = 5, endSection = 6, weeks = (5..12).toSet()),
 )
+
 
 
 

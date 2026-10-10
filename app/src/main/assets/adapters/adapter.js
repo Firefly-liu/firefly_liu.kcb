@@ -1,12 +1,23 @@
 /*
- * 黑龙江工程学院 · 正方教务（jwglxt 新版）课表适配脚本
- * 目标页面：kbcx/xskbcx_cxXskbcxIndex.html?gnmkdm=N2151
+ * 正方教务（jwglxt）课表适配脚本 —— 通用模板
  *
- * 解析规则要点：
- *  1) 逐行累积「当前节次」—— rowspan 会让同一节次跨多个 tr，绝不能按 td 下标取
- *  2) 红色斜体 = 待筛选，直接丢弃
+ * 想套用到自己的学校，你只需要确认下面三件事：
+ *   1) 课表页地址形如  .../kbcx/xskbcx_cxXskbcxIndex.html?gnmkdm=N2151
+ *   2) 课表是「列表版」：表格 id = kblist_table，
+ *      每周一个 tbody，id 依次是 xq_1 ~ xq_7
+ *   3) 每门课是一个 .timetable_con，课名在其中的 .title 里，
+ *      周数/校区/地点/教师等字段以纯文本形式跟在后面
+ *
+ * 如果目标学校用的是「格子版」课表（表格 id = kbgrid_table_0），
+ * 这份脚本不能直接用，需要另写一份 —— 接口保持不变即可：
+ * 解析出数据后调 kcbBridge.saveCourses(json) + notifyTaskCompletion()。
+ *
+ * 解析规则要点（踩过的坑）：
+ *  1) 逐行累积「当前节次」—— rowspan 会让同一节次跨多个 tr，
+ *     后续 tr 里没有节次单元格，绝不能按 td 下标取
+ *  2) 红色斜体的「待筛选」课直接丢弃
  *  3) 字段用「下一个字段名」做边界，避免地点里的空格把内容截断
- *  4) 星期用 xq_N 的下标，不解析中文
+ *  4) 星期用 xq_N 的下标，不要解析中文
  */
 (function () {
     var BRIDGE = window.kcbBridge || null;

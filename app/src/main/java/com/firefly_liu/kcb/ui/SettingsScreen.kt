@@ -16,8 +16,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -30,6 +32,13 @@ fun SettingsScreen(
     onPinWidget: () -> Unit,
     onResetSemester: () -> Unit,
 ) {
+    // 本地专用声明：不在仓库里的 local_only.xml 里，没有就整段不显示
+    val context = LocalContext.current
+    val localNotice = remember {
+        val resId = context.resources.getIdentifier("local_notice", "string", context.packageName)
+        if (resId != 0) context.getString(resId) else null
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -72,6 +81,16 @@ fun SettingsScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
 
+                if (localNotice != null) {
+                    Spacer(Modifier.height(12.dp))
+                    Text(
+                        localNotice,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+
                 Spacer(Modifier.height(12.dp))
                 Text(
                     "2026 · 开源 · 仅供学习交流",
@@ -105,3 +124,4 @@ fun SettingsScreen(
         Spacer(Modifier.height(24.dp))
     }
 }
+

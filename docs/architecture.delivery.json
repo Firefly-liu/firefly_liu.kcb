@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "6604e880-2754-40f9-9bcc-71e758a4daa0",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "E:\\手机课程表\\KcbApp\\.archify\\architecture-kcb-app-20261010-201853\\candidate.json",
+  "output": "E:\\手机课程表\\KcbApp\\docs\\architecture.html",
+  "specification": {
+    "sha256": "6d17cae40970bd0b9e2b3c140dfb1f02e7ed9324b6854f7f32c93a144efa105f",
+    "bytes": 5474
+  },
+  "artifact": {
+    "sha256": "444bcbd19155b1e02dbadec4027c8ae43d2f386ec89a432ac4f80598c8453bfd",
+    "bytes": 777750
+  }
+}

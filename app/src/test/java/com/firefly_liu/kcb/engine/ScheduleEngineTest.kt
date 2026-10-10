@@ -27,7 +27,7 @@ class ScheduleEngineTest {
         weeks = weeks.toSet(),
     )
 
-    private val monA = course(1, "工业机器人", 1, 1, 2, 1..16)
+    private val monA = course(1, "高等数学", 1, 1, 2, 1..16)
     private val satA = course(2, "周六课", 6, 1, 2, 1..16)
     private val tueB = course(3, "前半学期课", 2, 5, 6, 1..8)
 
@@ -61,7 +61,7 @@ class ScheduleEngineTest {
         val remap = DateRemap(targetDate = sat, sourceWeekday = 1, note = "tiaoxiu")
         val list = ScheduleEngine.instancesOf(sat, listOf(monA, satA), listOf(remap), config)
         assertEquals(1, list.size)
-        assertEquals("工业机器人", list[0].name)
+        assertEquals("高等数学", list[0].name)
         assertEquals(InstanceOrigin.REMAPPED, list[0].origin)
     }
 
@@ -122,9 +122,10 @@ class ScheduleEngineTest {
         val r1 = DateRemap(targetDate = sat, sourceWeekday = 1)
         val r2 = DateRemap(targetDate = mon, sourceWeekday = 6)
         val satList = ScheduleEngine.instancesOf(sat, listOf(monA, satA), listOf(r1, r2), config)
-        assertEquals("工业机器人", satList[0].name)
+        assertEquals("高等数学", satList[0].name)
         val monList = ScheduleEngine.instancesOf(mon, listOf(monA, satA), listOf(r1, r2), config)
         assertEquals("周六课", monList[0].name)
     }
 }
+
 
