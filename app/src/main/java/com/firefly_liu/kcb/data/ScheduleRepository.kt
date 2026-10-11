@@ -49,6 +49,14 @@ class ScheduleRepository(private val db: AppDatabase) {
         db.overrideDao().insertInstanceOverride(InstanceOverrideEntity.from(o))
     }
 
+    /** 覆盖层整体替换（导入备份时用）：先清空再写入 */
+    suspend fun replaceOverrides(remaps: List<DateRemap>, instances: List<InstanceOverride>) {
+        db.overrideDao().clearDateRemaps()
+        db.overrideDao().clearInstanceOverrides()
+        remaps.forEach { db.overrideDao().insertDateRemap(DateRemapEntity.from(it)) }
+        instances.forEach { db.overrideDao().insertInstanceOverride(InstanceOverrideEntity.from(it)) }
+    }
+
     /** 撤销一条调整记录 */
     suspend fun removeOverride(o: Override) {
         when (o) {
@@ -72,6 +80,7 @@ class ScheduleRepository(private val db: AppDatabase) {
         return ScheduleEngine.instancesOf(date, loadCourses(), loadOverrides(), config)
     }
 }
+
 
 
 

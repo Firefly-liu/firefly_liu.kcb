@@ -1,5 +1,6 @@
 package com.firefly_liu.kcb.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,23 +45,28 @@ import java.time.ZoneOffset
 @Composable
 fun SetupWizardScreen(
     onSave: (SemesterConfig) -> Unit,
+    initial: SemesterConfig? = null,
+    onCancel: (() -> Unit)? = null,
 ) {
-    var startDate by remember { mutableStateOf(mondayOf(LocalDate.now())) }
-    var totalWeeks by remember { mutableIntStateOf(16) }
-    var slots by remember { mutableStateOf(SemesterConfig.defaultSlots()) }
+    var startDate by remember { mutableStateOf(initial?.startDate ?: mondayOf(LocalDate.now())) }
+    var totalWeeks by remember { mutableIntStateOf(initial?.totalWeeks ?: 16) }
+    var slots by remember { mutableStateOf(initial?.slots ?: SemesterConfig.defaultSlots()) }
     var showDatePicker by remember { mutableStateOf(false) }
     var editingIndex by remember { mutableIntStateOf(-1) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            // 全屏 Dialog 里必须有不透明底色，否则会透出底层界面、文字叠在一起
+            .background(MaterialTheme.colorScheme.surface)
             .verticalScroll(rememberScrollState())
             .padding(20.dp),
     ) {
         Text("学期设置", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(4.dp))
         Text(
-            "开学日期和作息时间抓不到，需要你填一次",
+            if (initial == null) "开学日期和作息时间抓不到，需要你填一次"
+            else "改完直接生效，不会动已经导入的课表",
             style = MaterialTheme.typography.bodySmall,
         )
 
@@ -217,5 +223,7 @@ private fun parseTime(s: String): LocalTime? = try {
 } catch (_: Exception) {
     null
 }
+
+
 
 

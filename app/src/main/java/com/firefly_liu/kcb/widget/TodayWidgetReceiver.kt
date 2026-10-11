@@ -3,6 +3,9 @@ package com.firefly_liu.kcb.widget
 import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
+import androidx.glance.GlanceId
+import androidx.glance.appwidget.action.ActionCallback
+import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.updateAll
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -19,6 +22,20 @@ class TodayWidgetReceiver : GlanceAppWidgetReceiver() {
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
         WidgetScheduler.schedule(context)
+    }
+}
+
+/** 点 ◀ / ▶ 切换小组件显示的是第几天 */
+class WidgetShiftDayAction : ActionCallback {
+    override suspend fun onAction(
+        context: Context,
+        glanceId: GlanceId,
+        parameters: ActionParameters,
+    ) {
+        val delta = parameters[WidgetPrefs.DELTA_KEY] ?: 0
+        val next = WidgetPrefs.offset(context) + delta
+        WidgetPrefs.setOffset(context, next)
+        TodayWidget().update(context, glanceId)
     }
 }
 
@@ -59,6 +76,12 @@ object WidgetScheduler {
     /** 数据变化时立即刷新（调用方在自己的协程 scope 里调） */
     suspend fun refreshNow(context: Context) {
         TodayWidget().updateAll(context)
-    }}
+    }
+}
+
+
+
+
+
 
 

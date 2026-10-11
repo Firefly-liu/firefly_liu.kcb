@@ -4,9 +4,11 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.graphics.Bitmap
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import com.firefly_liu.kcb.data.BackupHelper
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.rememberScrollState
@@ -100,6 +102,8 @@ fun HomeScreen(
     var showAddCourse by remember { mutableStateOf(false) }
     var showAdjustments by remember { mutableStateOf(false) }
     var showSettings by remember { mutableStateOf(false) }
+    var showTeaching by remember { mutableStateOf(false) }
+    var editingSemester by remember { mutableStateOf(false) }
     var conflictPrompt by remember { mutableStateOf<ConflictPrompt?>(null) }
     var showImport by remember { mutableStateOf(false) }
     var bgBitmap by remember { mutableStateOf<Bitmap?>(null) }
@@ -295,20 +299,18 @@ fun HomeScreen(
                         Text("移动到其他日期 / 节次…")
                     }
                     TextButton(onClick = {
-                        val cid = inst.sourceCourseId
-                        if (cid != null) {
+                        // 复制/移动出来的课没有 sourceCourseId，靠 snapshot 一样能匹配，不能判空
                             scope.launch {
                                 repo.addInstanceOverride(
                                     InstanceOverride(
                                         date = date,
                                         action = OverrideAction.REMOVE,
-                                        targetCourseId = cid,
+                                    targetCourseId = inst.sourceCourseId,
                                         snapshot = CourseSnapshot.of(inst),
                                         originLabel = "删除",
                                     )
                                 )
                                 reload()
-                            }
                         }
                         courseMenu = null
                     }) {
@@ -364,6 +366,74 @@ fun HomeScreen(
         ) { DatePicker(state = state) }
     }
 
+    // ---------- 导出 / 导入 ----------
+    val exportLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/json"),
+    ) { uri ->
+        if (uri != null) {
+            scope.launch {
+                runCatching {
+                    val json = BackupHelper.exportJson(repo)
+                    context.contentResolver.openOutputStream(uri)?.use { it.write(json.toByteArray()) }
+                }.onSuccess {
+                    Toast.makeText(context, "已导出，文件里含课表、调休和学期设置", Toast.LENGTH_LONG).show()
+                }.onFailure {
+                    Toast.makeText(context, "导出失败：${it.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    val importLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument(),
+    ) { uri ->
+        if (uri != null) {
+            scope.launch {
+                runCatching {
+                    val json = context.contentResolver.openInputStream(uri)
+                        ?.bufferedReader()?.use { it.readText() } ?: error("读不到文件内容")
+                    BackupHelper.importJson(repo, json)
+                }.onSuccess { n ->
+                    reload()
+                    Toast.makeText(context, "导入成功，共 $n 门课", Toast.LENGTH_LONG).show()
+                }.onFailure {
+                    Toast.makeText(context, "导入失败：${it.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    // ---------- 使用教学（全屏）----------
+    if (showTeaching) {
+        androidx.compose.ui.window.Dialog(
+            onDismissRequest = { showTeaching = false },
+            properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false),
+        ) {
+            TeachingScreen(onBack = { showTeaching = false })
+        }
+    }
+
+    // ---------- 学期设置（编辑，不动课表）----------
+    if (editingSemester) {
+        androidx.compose.ui.window.Dialog(
+            onDismissRequest = { editingSemester = false },
+            properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false),
+        ) {
+            SetupWizardScreen(
+                onSave = { cfg ->
+                    scope.launch {
+                        repo.saveConfig(cfg)
+                        reload()
+                        editingSemester = false
+                        Toast.makeText(context, "学期设置已更新", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                initial = config,
+                onCancel = { editingSemester = false },
+            )
+        }
+    }
+
     // ---------- 设置 / 关于（全屏）----------
     if (showSettings) {
         androidx.compose.ui.window.Dialog(
@@ -389,12 +459,19 @@ fun HomeScreen(
                         }
                     }
                 },
-                onResetSemester = {
+                onOpenTeaching = {
                     showSettings = false
-                    scope.launch {
-                        repo.clearConfig()
-                        onReset()
-                    }
+                    showTeaching = true
+                },
+                onEditSemester = {
+                    showSettings = false
+                    editingSemester = true
+                },
+                onExport = {
+                    exportLauncher.launch("课程表备份-${LocalDate.now()}.json")
+                },
+                onImport = {
+                    importLauncher.launch(arrayOf("application/json"))
                 },
             )
         }
@@ -695,6 +772,9 @@ fun demoCourses(): List<Course> = listOf(
     Course(id = 9, name = "离散数学", teacher = "吴老师", position = "教学楼B105", day = 5, startSection = 3, endSection = 4, weeks = (1..8).toSet()),
     Course(id = 10, name = "工程制图", teacher = "郑老师", position = "教学楼A110", day = 5, startSection = 5, endSection = 6, weeks = (5..12).toSet()),
 )
+
+
+
 
 
 

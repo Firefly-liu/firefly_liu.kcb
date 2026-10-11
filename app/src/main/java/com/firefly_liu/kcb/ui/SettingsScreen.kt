@@ -30,7 +30,10 @@ fun SettingsScreen(
     onBack: () -> Unit,
     onOpenBackground: () -> Unit,
     onPinWidget: () -> Unit,
-    onResetSemester: () -> Unit,
+    onOpenTeaching: () -> Unit,
+    onEditSemester: () -> Unit,
+    onExport: () -> Unit,
+    onImport: () -> Unit,
 ) {
     // 本地专用声明：不在仓库里的 local_only.xml 里，没有就整段不显示
     val context = LocalContext.current
@@ -115,8 +118,27 @@ fun SettingsScreen(
 
         // ---------- 学期 ----------
         Text("学期", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium)
-        TextButton(onClick = onResetSemester, modifier = Modifier.fillMaxWidth()) {
-            Text("重新设置学期（会清空当前配置）", modifier = Modifier.fillMaxWidth())
+        TextButton(onClick = onEditSemester, modifier = Modifier.fillMaxWidth()) {
+            Text("学期设置（开学日期 / 作息时间）", modifier = Modifier.fillMaxWidth())
+        }
+
+        Spacer(Modifier.height(24.dp))
+
+        // ---------- 备份 ----------
+        Text("备份与恢复", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium)
+        TextButton(onClick = onExport, modifier = Modifier.fillMaxWidth()) {
+            Text("导出课表（含调休记录与学期设置）", modifier = Modifier.fillMaxWidth())
+        }
+        TextButton(onClick = onImport, modifier = Modifier.fillMaxWidth()) {
+            Text("导入课表（从备份文件恢复）", modifier = Modifier.fillMaxWidth())
+        }
+
+        Spacer(Modifier.height(24.dp))
+
+        // ---------- 帮助 ----------
+        Text("帮助", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium)
+        TextButton(onClick = onOpenTeaching, modifier = Modifier.fillMaxWidth()) {
+            Text("使用教学", modifier = Modifier.fillMaxWidth())
         }
 
         Spacer(Modifier.height(32.dp))
@@ -124,4 +146,5 @@ fun SettingsScreen(
         Spacer(Modifier.height(24.dp))
     }
 }
+
 
