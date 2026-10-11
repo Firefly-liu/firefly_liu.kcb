@@ -35,7 +35,9 @@ class WidgetShiftDayAction : ActionCallback {
         val delta = parameters[WidgetPrefs.DELTA_KEY] ?: 0
         val next = WidgetPrefs.offset(context) + delta
         WidgetPrefs.setOffset(context, next)
-        TodayWidget().update(context, glanceId)
+        // 必须用 updateAll —— 实测 update(context, glanceId) 会挂住不返回，
+        // 状态能写进 prefs 但界面不刷新。
+        TodayWidget().updateAll(context)
     }
 }
 
@@ -78,6 +80,10 @@ object WidgetScheduler {
         TodayWidget().updateAll(context)
     }
 }
+
+
+
+
 
 
 
