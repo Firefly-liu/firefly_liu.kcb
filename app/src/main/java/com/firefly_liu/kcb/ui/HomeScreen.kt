@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import com.firefly_liu.kcb.BuildConfig
 import com.firefly_liu.kcb.data.BackupHelper
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -441,7 +442,7 @@ fun HomeScreen(
             properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false),
         ) {
             SettingsScreen(
-                versionName = "0.1.0",
+                versionName = BuildConfig.VERSION_NAME,
                 onBack = { showSettings = false },
                 onOpenBackground = {
                     showSettings = false
@@ -772,6 +773,7 @@ fun demoCourses(): List<Course> = listOf(
     Course(id = 9, name = "离散数学", teacher = "吴老师", position = "教学楼B105", day = 5, startSection = 3, endSection = 4, weeks = (1..8).toSet()),
     Course(id = 10, name = "工程制图", teacher = "郑老师", position = "教学楼A110", day = 5, startSection = 5, endSection = 6, weeks = (5..12).toSet()),
 )
+
 
 
 
