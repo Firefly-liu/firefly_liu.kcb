@@ -452,7 +452,7 @@ fun HomeScreen(
                         val mgr = AppWidgetManager.getInstance(context)
                         if (mgr.isRequestPinAppWidgetSupported) {
                             mgr.requestPinAppWidget(
-                                ComponentName(context, com.firefly_liu.kcb.widget.TodayWidgetReceiver::class.java),
+                                ComponentName(context, com.firefly_liu.kcb.widget.TodayWidgetProvider::class.java),
                                 null,
                                 null,
                             )
@@ -772,6 +772,7 @@ fun demoCourses(): List<Course> = listOf(
     Course(id = 9, name = "离散数学", teacher = "吴老师", position = "教学楼B105", day = 5, startSection = 3, endSection = 4, weeks = (1..8).toSet()),
     Course(id = 10, name = "工程制图", teacher = "郑老师", position = "教学楼A110", day = 5, startSection = 5, endSection = 6, weeks = (5..12).toSet()),
 )
+
 
 
 

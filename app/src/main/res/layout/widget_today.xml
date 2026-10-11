@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/widget_bg"
+    android:padding="10dp">
+
+    <!-- 标题行：左箭头 / 标题 / 右箭头 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/btn_prev"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:gravity="center"
+            android:background="@drawable/widget_arrow_bg"
+            android:text="◀"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#6750A4" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#1D1B20" />
+
+        <TextView
+            android:id="@+id/btn_next"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:gravity="center"
+            android:background="@drawable/widget_arrow_bg"
+            android:text="▶"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#6750A4" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textSize="14sp"
+        android:textColor="#79747E" />
+
+    <!-- 最多 5 行课程，每行固定两个 TextView，刷新时只改文字不重建 -->
+    <LinearLayout android:id="@+id/row1" style="@style/WidgetRow">
+        <TextView android:id="@+id/t1_time" style="@style/WidgetTime" />
+        <TextView android:id="@+id/t1_name" style="@style/WidgetName" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/row2" style="@style/WidgetRow">
+        <TextView android:id="@+id/t2_time" style="@style/WidgetTime" />
+        <TextView android:id="@+id/t2_name" style="@style/WidgetName" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/row3" style="@style/WidgetRow">
+        <TextView android:id="@+id/t3_time" style="@style/WidgetTime" />
+        <TextView android:id="@+id/t3_name" style="@style/WidgetName" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/row4" style="@style/WidgetRow">
+        <TextView android:id="@+id/t4_time" style="@style/WidgetTime" />
+        <TextView android:id="@+id/t4_name" style="@style/WidgetName" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/row5" style="@style/WidgetRow">
+        <TextView android:id="@+id/t5_time" style="@style/WidgetTime" />
+        <TextView android:id="@+id/t5_name" style="@style/WidgetName" />
+    </LinearLayout>
+
+</LinearLayout>
+

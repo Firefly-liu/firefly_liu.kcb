@@ -18,7 +18,7 @@
         </activity>
 
         <receiver
-            android:name=".widget.TodayWidgetReceiver"
+            android:name=".widget.TodayWidgetProvider"
             android:exported="true"
             android:label="@string/widget_label">
             <intent-filter>
@@ -30,4 +30,5 @@
         </receiver>
     </application>
 </manifest>
+
 
