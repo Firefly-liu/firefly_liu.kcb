@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "课程表 App 架构总览",
+    "subtitle": "纯本地安卓课表 · 从教务抓取到桌面小组件",
+    "locale": "zh-CN",
+    "output": "docs/architecture.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/Firefly-liu/firefly_liu.kcb.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "3a8606eab7d340f4a1e85e17beb3d2e9011a40bd"
+    }
+  },
+  "components": [
+    { "id": "user", "type": "external", "label": "用户", "sublabel": "手机 · 全离线", "pos": [30, 300], "size": [112, 64] },
+
+    { "id": "wizard", "type": "frontend", "label": "首启向导", "sublabel": "开学日期 + 作息表", "pos": [230, 90], "size": [158, 58], "sources": [{ "path": "app/src/main/java/com/firefly_liu/kcb/ui/SetupWizardScreen.kt", "line": 46 }] },
+    { "id": "addcourse", "type": "frontend", "label": "添加课程", "sublabel": "周次 + 节次", "pos": [420, 90], "size": [158, 58], "sources": [{ "path": "app/src/main/java/com/firefly_liu/kcb/ui/AddCourseScreen.kt", "line": 48 }] },
+    { "id": "settings", "type": "frontend", "label": "设置 / 关于", "sublabel": "背景 · 组件 · 署名", "pos": [610, 90], "size": [158, 58], "sources": [{ "path": "app/src/main/java/com/firefly_liu/kcb/ui/SettingsScreen.kt", "line": 28 }] },
+    { "id": "teaching", "type": "frontend", "label": "使用教学", "sublabel": "v2.0 新增", "pos": [790, 90], "size": [130, 58], "sources": [{ "path": "app/src/main/java/com/firefly_liu/kcb/ui/TeachingScreen.kt", "line": 25 }] },
+    { "id": "import", "type": "frontend", "label": "从教务导入", "sublabel": "WebView", "pos": [960, 90], "size": [150, 58], "sources": [{ "path": "app/src/main/java/com/firefly_liu/kcb/ui/ImportScreen.kt", "line": 63 }] },
+
+    { "id": "home", "type": "frontend", "label": "主页 / 周视图", "sublabel": "Jetpack Compose", "pos": [230, 300], "size": [158, 64], "tag": "长按即调休", "sources": [{ "path": "app/src/main/java/com/firefly_liu/kcb/ui/HomeScreen.kt", "line": 83 }] },
+    { "id": "engine", "type": "backend", "label": "ScheduleEngine", "sublabel": "纯函数计算引擎", "pos": [470, 300], "size": [158, 64], "sources": [{ "path": "app/src/main/java/com/firefly_liu/kcb/data/engine/ScheduleEngine.kt", "line": 19 }] },
+    { "id": "repo", "type": "backend", "label": "ScheduleRepository", "sublabel": "Room 粘合层", "pos": [715, 300], "size": [158, 64], "sources": [{ "path": "app/src/main/java/com/firefly_liu/kcb/data/ScheduleRepository.kt", "line": 18 }] },
+
+    { "id": "widget", "type": "backend", "label": "桌面小组件", "sublabel": "RemoteViews 5 行", "pos": [470, 480], "size": [158, 58], "sources": [{ "path": "app/src/main/java/com/firefly_liu/kcb/widget/TodayWidgetProvider.kt", "line": 43 }] },
+    { "id": "worker", "type": "backend", "label": "WorkManager", "sublabel": "0 点 / 12 点刷新", "pos": [470, 650], "size": [158, 58], "sources": [{ "path": "app/src/main/java/com/firefly_liu/kcb/widget/WidgetScheduler.kt", "line": 14 }] },
+
+    { "id": "bg", "type": "database", "label": "背景图 + 偏好", "sublabel": "filesDir", "pos": [230, 480], "size": [158, 58], "sources": [{ "path": "app/src/main/java/com/firefly_liu/kcb/data/BackgroundPrefs.kt", "line": 9 }] },
+    { "id": "room", "type": "database", "label": "Room / SQLite", "sublabel": "kcb.db v2", "pos": [690, 480], "size": [158, 58], "sources": [{ "path": "app/src/main/java/com/firefly_liu/kcb/data/db/AppDatabase.kt", "line": 17 }] },
+
+    { "id": "adapter", "type": "backend", "label": "JS 适配脚本", "sublabel": "adapter.js", "pos": [935, 300], "size": [150, 58], "tag": "可替换", "sources": [{ "path": "app/src/main/assets/adapters/adapter.js", "line": 22 }] },
+    { "id": "bridge", "type": "backend", "label": "kcbBridge", "sublabel": "JS ↔ Kotlin", "pos": [935, 480], "size": [150, 58], "sources": [{ "path": "app/src/main/java/com/firefly_liu/kcb/ui/ImportScreen.kt", "line": 49 }] },
+    { "id": "webvpn", "type": "external", "label": "学校 WebVPN", "sublabel": "正方教务系统", "pos": [1220, 90], "size": [158, 58] }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "手机本地 · 不联网也能用",
+      "wraps": ["home", "wizard", "addcourse", "settings", "teaching", "engine", "repo", "room", "bg", "widget", "worker"]
+    }
+  ],
+  "connections": [
+    { "id": "user-home", "from": "user", "to": "home", "label": "长按 / 点击", "variant": "emphasis" },
+    { "id": "user-wizard", "from": "user", "to": "wizard", "label": "首次启动" },
+    { "id": "home-engine", "from": "home", "to": "engine", "label": "按天取实例", "variant": "emphasis" },
+    { "id": "engine-repo", "from": "engine", "to": "repo", "label": "课程 + 覆盖" },
+    { "id": "repo-room", "from": "repo", "to": "room", "label": "读写" },
+    { "id": "home-bg", "from": "home", "to": "bg", "label": "背景图" },
+    { "id": "home-teaching", "from": "home", "to": "teaching", "label": "打开教学" },
+
+    { "id": "wizard-repo", "from": "wizard", "to": "repo", "label": "保存学期配置" },
+    { "id": "addcourse-repo", "from": "addcourse", "to": "repo", "label": "新增课程" },
+    { "id": "settings-repo", "from": "settings", "to": "repo", "label": "改学期 / 清空" },
+
+    { "id": "import-webvpn", "from": "import", "to": "webvpn", "label": "打开课表页" },
+    { "id": "import-adapter", "from": "import", "to": "adapter", "label": "注入脚本" },
+    { "id": "adapter-bridge", "from": "adapter", "to": "bridge", "label": "回传 JSON" },
+    { "id": "bridge-repo", "from": "bridge", "to": "repo", "label": "先清空再写入", "variant": "emphasis" },
+
+    { "id": "engine-widget", "from": "engine", "to": "widget", "label": "今日课程" },
+    { "id": "worker-widget", "from": "worker", "to": "widget", "label": "定时刷新" },
+    { "id": "home-widget", "from": "home", "to": "widget", "label": "数据变更即时刷新" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "调休模型（只追加，永不改原始数据）",
+      "items": [
+        "DateRemap：某天按星期几的课表执行；sourceWeekday 为空即当天放假",
+        "InstanceOverride：单节课的增删，带来源标记",
+        "优先级唯一顺序：实例覆盖 > 日期重映射 > 原始课程",
+        "撤销 = 删掉一条记录，渲染时重新合成"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "课表抓取（用户手动触发）",
+      "items": [
+        "WebView 伪装桌面 UA，用户自己登录、自己点到课表页",
+        "App 不保存账号密码，也不代替登录",
+        "适配脚本逐行累积节次，对付 rowspan 跨行",
+        "红色斜体的「待筛选」课直接丢弃；解析失败只弹提示，不影响 App 本体"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "v2.0 新增",
+      "items": [
+        "BackupHelper.exportJson / importJson：课表、调休、学期配置导出为一份 JSON，可整份导回",
+        "使用教学页：把导入与调休的操作步骤写进 App 内",
+        "小组件改用传统 RemoteViews，箭头可切今天 / 明天 / 后天",
+        "设置页版本号直接读 BuildConfig.VERSION_NAME，改一处即可"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "离线与隐私",
+      "items": [
+        "除登录学校教务外不访问网络，无广告、无统计上报",
+        "课表 / 调休 / 背景图全部只存本机",
+        "选背景图用系统照片选择器，不需要任何存储权限",
+        "计算引擎是纯函数，单元测试覆盖覆盖层优先级"
+      ]
+    }
+  ]
+}
